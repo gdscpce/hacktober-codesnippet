@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import validator from "validator";
+import bcrypt from "bcrypt";
 
 const schema = new mongoose.Schema(
   {
@@ -17,7 +18,7 @@ const schema = new mongoose.Schema(
       required: true,
       select: false,
       minlength: 8,
-    },   
+    }, 
     deleted: {
       type: Boolean,
       default: false,
@@ -27,5 +28,14 @@ const schema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+schema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  this.password = await bcrypt.hash(this.password, 10);
+});
+
+schema.methods.comparePassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
 
 export const Model = mongoose.model("model", schema);
