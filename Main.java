@@ -8,7 +8,7 @@ class Main {
         }
         System.out.println();
     }
-    // main function of the program
+    // main function for the program
     public static void main(String[] args)
     {
         int[] a = {12, 8, 4, 14, 36, 64, 15, 72, 67, 84};
